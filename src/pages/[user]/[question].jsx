@@ -1,11 +1,14 @@
+import { useState } from "react"
 import { supabaseApp } from "@/api/supabase"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import styles from "@/styles/question.module.css"
+import Head from "next/head"
 
 const QuestionPage = ({ questionData, userData }) => {
 	const [question, setQuestion] = useState("")
 	const [isLoading, setIsLoading] = useState(false)
 
+	console.log({ questionData, userData })
 	const handleSubmit = async e => {
 		setIsLoading(true)
 		e.preventDefault()
@@ -22,22 +25,45 @@ const QuestionPage = ({ questionData, userData }) => {
 			setIsLoading(false)
 		}
 	}
+	const pageTitle = `${userData?.name} - ${questionData?.description}`
 	return (
-		<div>
-			<p>
-				{userData?.name} | {questionData?.description}
-			</p>
-			<form onSubmit={handleSubmit}>
-				<input
-					value={question}
-					onChange={e => {
-						setQuestion(e.target.value)
-					}}
-				/>
+		<>
+			<Head>
+				<title>{pageTitle}</title>
+				<meta name='description' content='Lie to questions annonymously🤭' />
+				<meta name='viewport' content='width=device-width, initial-scale=1' />
+				<link rel='icon' href='/favicon.ico' />
+			</Head>
+			<main className={styles.main}>
+				<section className={styles.wrapper}>
+					<header className={styles.userContainer}>
+						<div className={styles.emojiContainer}>
+							<p>🤪</p>
+						</div>
+						<div>
+							<p>{userData?.name}</p>
+							<h4>{questionData?.description}</h4>
+						</div>
+					</header>
 
-				<button>{isLoading ? "Loading..." : "Send"}</button>
-			</form>
-		</div>
+					<form onSubmit={handleSubmit}>
+						<textarea
+							className={styles.questionTextArea}
+							value={question}
+							onChange={e => {
+								setQuestion(e.target.value)
+							}}
+							placeholder='send me anonymous messages i will lie to...'
+							rows={8}
+						/>
+
+						<button className={styles.button}>
+							{isLoading ? "Loading..." : "Send"}
+						</button>
+					</form>
+				</section>
+			</main>
+		</>
 	)
 }
 
