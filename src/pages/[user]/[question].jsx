@@ -8,7 +8,6 @@ const QuestionPage = ({ questionData, userData }) => {
 	const [question, setQuestion] = useState("")
 	const [isLoading, setIsLoading] = useState(false)
 
-	console.log({ questionData, userData })
 	const handleSubmit = async e => {
 		setIsLoading(true)
 		e.preventDefault()
@@ -34,7 +33,11 @@ const QuestionPage = ({ questionData, userData }) => {
 				<meta name='viewport' content='width=device-width, initial-scale=1' />
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
-			<main className={styles.main}>
+			<main
+				className={styles.main}
+				style={{
+					background: `linear-gradient(150deg, ${questionData?.primary_color}, ${questionData?.secondary_color});`,
+				}}>
 				<section className={styles.wrapper}>
 					<header className={styles.userContainer}>
 						<div className={styles.emojiContainer}>
@@ -55,7 +58,9 @@ const QuestionPage = ({ questionData, userData }) => {
 							}}
 							placeholder='send me anonymous messages i will lie to...'
 							rows={8}
+							cols={200}
 						/>
+						<p className={styles.qA}>🔒 anonymous q&a</p>
 
 						<button className={styles.button}>
 							{isLoading ? "Loading..." : "Send"}
@@ -73,7 +78,7 @@ export async function getServerSideProps(context) {
 
 	const { data: questionData, error: questionDataError } = await supabaseApp
 		.from("questions")
-		.select("id, description")
+		.select("id, description, primary_color, secondary_color")
 		.eq("slug", question)
 
 	const { data: userData, error: userDataError } = await supabaseApp

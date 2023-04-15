@@ -4,11 +4,11 @@
 	align-items: center;
 	padding: 2rem;
 	min-height: 100vh;
+	background: linear-gradient(150deg, #ec1187, #ff8d10);
 }
 
 .wrapper {
 	max-width: 640px;
-	width: 100%;
 }
 
 .userContainer {
@@ -19,7 +19,7 @@
 	color: var(--color-black);
 	display: flex;
 	align-items: flex-start;
-	width: 100%;
+	max-width: 640px;
 }
 
 .questionTextArea {
@@ -34,7 +34,13 @@
 	font-weight: bold;
 	color: var(--color-black);
 	font-size: 20px;
+	min-width: 321px;
+	max-width: 640px;
 	width: 100%;
+}
+
+.questionTextArea::placeholder {
+	color: rgba(0, 0, 0, 0.4);
 }
 
 .emojiContainer {
@@ -55,10 +61,15 @@
 	margin-block-start: 0px;
 }
 
+.qA {
+	text-align: center;
+	font-weight: 300;
+	font-size: 14px;
+}
 .button {
 	background-color: var(--color-black);
-	border-radius: 25px;
-	padding: 1rem;
+	border-radius: 3rem;
+	padding: 1.5rem 1rem;
 	display: block;
 	margin-top: 2rem;
 	outline: none;
