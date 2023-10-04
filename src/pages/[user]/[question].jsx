@@ -4,6 +4,26 @@ import { useRouter } from "next/router"
 import styles from "@/styles/question.module.css"
 import Head from "next/head"
 import Image from "next/image"
+/**
+ *
+ * @param {string} expoPushToken
+ * @param {string} title
+ * @param {string} body
+ */
+
+async function sendPushNotification(title, body) {
+	fetch("/api/push-notification", {
+		method: "POST",
+		body: JSON.stringify({ title, description: body }),
+		headers: {
+			Accept: "application/json",
+			"Accept-encoding": "gzip, deflate",
+			"Content-Type": "application/json",
+		},
+	})
+		.then(res => res.json())
+		.then(data => console.log(data))
+}
 
 const QuestionPage = ({ questionData, userData }) => {
 	const [question, setQuestion] = useState("")
@@ -30,6 +50,8 @@ const QuestionPage = ({ questionData, userData }) => {
 				setQuestion("")
 				setIsSuccess(true)
 
+				await sendPushNotification(questionData?.title, question)
+
 				setTimeout(() => {
 					setIsSuccess(false)
 				}, 10000)
@@ -55,7 +77,7 @@ const QuestionPage = ({ questionData, userData }) => {
 			<main
 				className={styles.main}
 				style={{
-					background: `linear-gradient(150deg, ${questionData?.primary_color}, ${questionData?.secondary_color});`,
+					background: `linear-gradient(150deg, ${questionData?.primary_color}, ${questionData?.secondary_color})`,
 				}}>
 				<section className={styles.wrapper}>
 					{isSuccess ? (
@@ -122,7 +144,7 @@ export async function getServerSideProps(context) {
 
 	const { data: questionData, error: questionDataError } = await supabaseApp
 		.from("questions")
-		.select("id, description, primary_color, secondary_color")
+		.select("id, description, primary_color, secondary_color, title")
 		.eq("slug", question)
 
 	const { data: userData, error: userDataError } = await supabaseApp
