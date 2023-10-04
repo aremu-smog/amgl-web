@@ -51,7 +51,9 @@ const QuestionPage = ({ questionData, userData, expoToken }) => {
 				setQuestion("")
 				setIsSuccess(true)
 
-				await sendPushNotification(expoToken, questionData?.title, question)
+				if (expoToken) {
+					await sendPushNotification(expoToken, questionData?.title, question)
+				}
 
 				setTimeout(() => {
 					setIsSuccess(false)
@@ -158,11 +160,13 @@ export async function getServerSideProps(context) {
 		.select("expo_token")
 		.eq("user_id", userData[0]?.user_id)
 
+	const expoToken = expoData.length > 0 ? expoData[0]["expo_token"] : ""
+
 	return {
 		props: {
 			questionData: questionData[0],
 			userData: userData[0],
-			expoToken: expoData[0]["expo_token"],
+			expoToken,
 		}, // will be passed to the page component as props
 	}
 }
