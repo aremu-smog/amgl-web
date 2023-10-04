@@ -11,10 +11,11 @@ import Image from "next/image"
  * @param {string} body
  */
 
-async function sendPushNotification(title, body) {
+async function sendPushNotification(expoToken, title, body) {
 	fetch("/api/push-notification", {
 		method: "POST",
-		body: JSON.stringify({ title, description: body }),
+		// This needs to be improved as this token is now 'exposed'
+		body: JSON.stringify({ expoToken, title, description: body }),
 		headers: {
 			Accept: "application/json",
 			"Accept-encoding": "gzip, deflate",
@@ -25,7 +26,7 @@ async function sendPushNotification(title, body) {
 		.then(data => console.log(data))
 }
 
-const QuestionPage = ({ questionData, userData }) => {
+const QuestionPage = ({ questionData, userData, expoToken }) => {
 	const [question, setQuestion] = useState("")
 	const [isLoading, setIsLoading] = useState(false)
 	const [isSuccess, setIsSuccess] = useState(false)
@@ -50,7 +51,7 @@ const QuestionPage = ({ questionData, userData }) => {
 				setQuestion("")
 				setIsSuccess(true)
 
-				await sendPushNotification(questionData?.title, question)
+				await sendPushNotification(expoToken, questionData?.title, question)
 
 				setTimeout(() => {
 					setIsSuccess(false)
@@ -152,10 +153,16 @@ export async function getServerSideProps(context) {
 		.select("user_id, name")
 		.eq("name", user)
 
+	const { data: expoData, error: expoDataError } = await supabaseApp
+		.from("push_notifications")
+		.select("expo_token")
+		.eq("user_id", userData[0]?.user_id)
+
 	return {
 		props: {
 			questionData: questionData[0],
 			userData: userData[0],
+			expoToken: expoData[0]["expo_token"],
 		}, // will be passed to the page component as props
 	}
 }
