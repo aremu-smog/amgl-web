@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { supabaseApp } from "@/api/supabase"
 import { useRouter } from "next/router"
 import styles from "@/styles/question.module.css"
@@ -129,14 +129,27 @@ const QuestionPage = ({ questionData, userData, expoToken }) => {
 }
 
 const SuccessComponent = () => {
+	const [countDown, setCountDown] = useState(10)
+
+	useEffect(() => {
+		const timeInterval = setInterval(() => {
+			setCountDown(value => value - 1)
+		}, 1_000)
+
+		return () => clearInterval(timeInterval)
+	}, [])
+
 	return (
 		<div
 			style={{
 				textAlign: "center",
 				color: "white",
 			}}>
-			<Image src='/sent.png' width={110} height={110} />
+			<Image src='/sent.png' alt='' width={110} height={110} />
 			<h3>Sent!</h3>
+			<p>
+				Redirecting in <b>{countDown}</b>s
+			</p>
 		</div>
 	)
 }
