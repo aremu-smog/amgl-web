@@ -18,7 +18,7 @@ export const SuccessComponent = () => {
 				textAlign: "center",
 				color: "white",
 			}}>
-			<Image src='/sent.png' alt='' width={110} height={110} />
+			<Image src='/amgl/sent.png' alt='' width={110} height={110} />
 			<h3>Sent!</h3>
 			<p>
 				Redirecting in <b>{countDown}</b>s

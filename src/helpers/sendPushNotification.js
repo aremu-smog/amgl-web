@@ -6,7 +6,7 @@
  */
 
 export async function sendPushNotification(expoToken, title, body) {
-	fetch("/api/push-notification", {
+	fetch("/amgl/api/push-notification", {
 		method: "POST",
 		// This needs to be improved as this token is now 'exposed'
 		body: JSON.stringify({ expoToken, title, description: body }),
