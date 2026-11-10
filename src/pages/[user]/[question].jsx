@@ -14,7 +14,7 @@ const QuestionPage = ({ questionData, userData, expoToken }) => {
 				<title>{pageTitle}</title>
 				<meta name='description' content='Lie to questions annonymously🤭' />
 				<meta name='viewport' content='width=device-width, initial-scale=1' />
-				<link rel='icon' href='/favicon.png' />
+				<link rel='icon' href='/amgl/favicon.png' />
 			</Head>
 			<main
 				className={styles.main}
